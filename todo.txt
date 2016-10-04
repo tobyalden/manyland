@@ -1,4 +1,5 @@
 X add roll
+X add scrolling
 - add enemies
 - add pits
 - add damage / death

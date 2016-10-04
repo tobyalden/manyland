@@ -90,6 +90,9 @@ class Player extends ActiveEntity
 
     animate();
 
+    HXP.scene.camera.x = Math.floor(centerX / HXP.screen.width) * HXP.screen.width;
+    HXP.scene.camera.y = Math.floor(centerY / HXP.screen.height) * HXP.screen.height;
+
     super.update();
   }
 
