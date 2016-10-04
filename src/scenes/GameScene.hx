@@ -20,4 +20,10 @@ class GameScene extends Scene
 		}
 	}
 
+	public override function update()
+	{
+		super.update();
+		GameTimer.updateAll();
+	}
+
 }

@@ -1,0 +1,10 @@
+X add roll
+- add enemies
+- add pits
+- add damage / death
+- add textures
+- add some form of attack/defense
+- add npcs
+- add music
+- add sfx
+- add beginning / ending
