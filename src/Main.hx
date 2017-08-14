@@ -5,15 +5,15 @@ import scenes.*;
 class Main extends Engine
 {
 
-	override public function init()
-	{
+    override public function init()
+    {
 #if debug
-		HXP.console.enable();
+        HXP.console.enable();
 #end
-		HXP.scene = new GameScene();
-		HXP.screen.scale = 8;
-	}
+        HXP.scene = new GameScene();
+        HXP.screen.scale = 8;
+    }
 
-	public static function main() { new Main(); }
+    public static function main() { new Main(); }
 
 }
