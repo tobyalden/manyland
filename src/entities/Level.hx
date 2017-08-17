@@ -20,8 +20,10 @@ class Level extends TmxEntity
         map = TmxMap.loadFromFile(filename);
         for(entity in map.getObjectGroup("entities").objects)
         {
+            trace('entity found: ' + entity.gid);
             if(entity.gid == PLAYER)
             {
+                trace('added player');
                 entities.push(new Player(entity.x, entity.y));
             }
         }
@@ -56,6 +58,7 @@ class Level extends TmxEntity
                 }
             }
             addGraphic(tilemap);
+            trace('added graphic');
         }
     }
 
