@@ -44,7 +44,7 @@ class Player extends ActiveEntity
         if(!rollTimer.isActive())
         {
             if(rollTimer.wasActive()) {
-                    rollCooldownTimer.reset();
+                rollCooldownTimer.reset();
             }
             if(Input.check(Key.LEFT)) {
                 velocity.x = -SPEED;
