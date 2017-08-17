@@ -1,6 +1,5 @@
 package entities;
 
-import flash.system.System;
 import com.haxepunk.utils.*;
 import com.haxepunk.*;
 import com.haxepunk.graphics.*;
@@ -13,33 +12,56 @@ class Player extends ActiveEntity
     public static inline var ROLL_MULTIPLIER = 2;
     public static inline var ROLL_DURATION = 20;
     public static inline var ROLL_COOLDOWN = 12;
+    public static inline var CAST_DURATION= 20;
 
     private var rollTimer:GameTimer;
     private var rollCooldownTimer:GameTimer;
+    private var castDurationTimer:GameTimer;
     private var facing:String;
 
     public function new(x:Int, y:Int)
     {
         super(x, y);
 
-        sprite = new Spritemap("graphics/player.png", 16, 16);
+        sprite = new Spritemap("graphics/player.png", 16, 25);
         sprite.add("down", [0, 1], 6);
         sprite.add("right", [2, 3], 6);
         sprite.add("left", [4, 5], 6);
         sprite.add("up", [6, 7], 6);
         sprite.add("roll_vertical", [8, 9, 10, 11], 6);
         sprite.add("roll_horizontal", [12, 13, 14, 15], 6);
+        sprite.add("fall", [16, 17, 18, 19], 3, false);
+        sprite.add("death", [20]);
+        sprite.add("cast_down", [21]);
+        sprite.add("cast_right", [22]);
+        sprite.add("cast_left", [23]);
+        sprite.add("cast_up", [24]);
         sprite.play("down");
         facing = "down";
-        setHitbox(11, 15, -3, -1);
+        setHitbox(11, 15, -3, -11);
 
         rollTimer = new GameTimer(ROLL_DURATION);
         rollCooldownTimer = new GameTimer(ROLL_COOLDOWN);
+        castDurationTimer = new GameTimer(CAST_DURATION);
 
         finishInitializing();
     }
 
     public override function update()
+    {
+        var inControl = !(
+            rollTimer.isActive() || castDurationTimer.isActive()
+        );
+        if(inControl) {
+            movement();
+        }
+        moveBy(velocity.x, velocity.y, "walls");
+        setCamera();
+        animate();
+        super.update();
+    }
+
+    private function movement()
     {
         if(!rollTimer.isActive())
         {
@@ -69,7 +91,7 @@ class Player extends ActiveEntity
                 velocity.y = 0;
             }
 
-            if(Input.check(Key.X)) {
+            if(Input.check(Key.Z)) {
                 if(!rollCooldownTimer.isActive()) {
                     rollTimer.reset();
                     var singleDirectionMultipler:Float = 1;
@@ -82,27 +104,46 @@ class Player extends ActiveEntity
             }
         }
 
-        moveBy(velocity.x, velocity.y, "walls");
-
-        if(Input.check(Key.ESCAPE)) {
-            System.exit(0);
+        if(Input.check(Key.X)) {
+            castSpell();
         }
 
-        animate();
+    }
 
+    private function setCamera()
+    {
         var realWidth = HXP.screen.width / HXP.screen.scale;
         var realHeight = HXP.screen.height / HXP.screen.scale;
         scene.camera.x = centerX - realWidth/2;
-        scene.camera.x = Math.floor((scene.camera.x + realWidth/2) / realWidth) * realWidth;
+        scene.camera.x = (
+            Math.floor(
+                (scene.camera.x + realWidth/2) / realWidth
+            ) * realWidth
+        );
         scene.camera.y = centerY - realHeight/2;
-        scene.camera.y = Math.floor((scene.camera.y + realHeight/2) / realHeight) * realHeight;
+        scene.camera.y = (
+            Math.floor(
+                (scene.camera.y + realHeight/2) / realHeight
+            ) * realHeight
+        );
+    }
 
-        super.update();
+    private function castSpell()
+    {
+        velocity.x = 0;
+        velocity.y = 0;
+        HXP.scene.add(
+            new Spell(Math.round(centerX), Math.round(centerY), facing)
+        );
+        castDurationTimer.reset();
     }
 
     private function animate()
     {
-        if(rollTimer.isActive()) {
+        if(castDurationTimer.isActive()) {
+          sprite.play("cast_" + facing);
+        }
+        else if(rollTimer.isActive()) {
             if(velocity.y != 0) {
                 sprite.play("roll_vertical");
             }
