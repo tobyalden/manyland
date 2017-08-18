@@ -22,6 +22,7 @@ class Player extends ActiveEntity
     public function new(x:Int, y:Int)
     {
         super(x, y);
+        layer = 0;
 
         sprite = new Spritemap("graphics/player.png", 16, 25);
         sprite.add("down", [0, 1], 6);

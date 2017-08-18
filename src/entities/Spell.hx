@@ -19,6 +19,8 @@ class Spell extends ActiveEntity
     public function new(x:Int, y:Int, facing:String)
     {
         super(x - 3, y - 3);
+        layer = 1;
+
         sprite = new Spritemap("graphics/spell.png", 5, 5);
         sprite.add("idle", [0]);
         sprite.play("idle");
@@ -26,7 +28,6 @@ class Spell extends ActiveEntity
         setHitbox(5, 5);
 
         type = "spell";
-        layer = -9998;
 
         finishInitializing();
     }
