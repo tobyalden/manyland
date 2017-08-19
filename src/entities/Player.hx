@@ -1,8 +1,8 @@
 package entities;
 
-import com.haxepunk.utils.*;
 import com.haxepunk.*;
 import com.haxepunk.graphics.*;
+import com.haxepunk.utils.*;
 import entities.*;
 
 class Player extends ActiveEntity
@@ -14,10 +14,12 @@ class Player extends ActiveEntity
     public static inline var ROLL_COOLDOWN = 12;
     public static inline var CAST_DURATION= 20;
 
+    private var facing:String;
     private var rollTimer:GameTimer;
     private var rollCooldownTimer:GameTimer;
     private var castDurationTimer:GameTimer;
-    private var facing:String;
+
+    private var equippedItem:Item;
 
     public function new(x:Int, y:Int)
     {
@@ -39,12 +41,14 @@ class Player extends ActiveEntity
         sprite.add("cast_left", [23]);
         sprite.add("cast_up", [24]);
         sprite.play("down");
-        facing = "down";
         setHitbox(11, 15, -3, -11);
 
+        facing = "down";
         rollTimer = new GameTimer(ROLL_DURATION);
         rollCooldownTimer = new GameTimer(ROLL_COOLDOWN);
         castDurationTimer = new GameTimer(CAST_DURATION);
+
+        equippedItem = new Spellbook(0, 0);
 
         finishInitializing();
     }
@@ -107,7 +111,7 @@ class Player extends ActiveEntity
         }
 
         if(Input.check(Key.X)) {
-            castSpell();
+            useItem();
         }
 
     }
@@ -130,15 +134,21 @@ class Player extends ActiveEntity
         );
     }
 
-    private function castSpell()
+    private function useItem()
+    {
+        equippedItem.use(this);
+    }
+
+    public function stopToCast()
     {
         velocity.x = 0;
         velocity.y = 0;
-        HXP.scene.add(
-            new Spell(Math.round(centerX), Math.round(centerY), facing)
-        );
         castDurationTimer.reset();
-        HUD.echo(Std.string(Math.random()));
+    }
+
+    public function getFacing()
+    {
+        return facing;
     }
 
     private function animate()

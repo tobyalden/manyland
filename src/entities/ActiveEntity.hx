@@ -7,8 +7,8 @@ import com.haxepunk.graphics.Spritemap;
 
 class ActiveEntity extends Entity
 {
+    public var velocity:Point;
     private var sprite:Spritemap;
-    private var velocity:Point;
 
     public function new(x:Int, y:Int)
     {
