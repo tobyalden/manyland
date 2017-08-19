@@ -62,6 +62,7 @@ class Player extends ActiveEntity
             movement();
         }
         moveBy(velocity.x, velocity.y, "walls");
+        handleCollisions();
         setCamera();
         animate();
         super.update();
@@ -114,6 +115,15 @@ class Player extends ActiveEntity
             useItem();
         }
 
+    }
+
+    private function handleCollisions()
+    {
+        var item = collide("item", x, y);
+        if(item != null) {
+            equippedItem = cast(item, Item);
+            scene.remove(item);
+        }
     }
 
     private function setCamera()
