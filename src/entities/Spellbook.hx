@@ -8,9 +8,8 @@ class Spellbook extends Item
     public function new(x:Int, y:Int) 
     {
         super(x, y);
-        var sprite = new Image("graphics/spellbook.png");
-        sprite.smooth = false;
-        graphic = sprite;
+        sprite = new Image("graphics/spellbook.png");
+        finishInitializing();
     }
 
     override public function use(player:Player)

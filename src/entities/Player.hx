@@ -48,7 +48,7 @@ class Player extends ActiveEntity
         rollCooldownTimer = new GameTimer(ROLL_COOLDOWN);
         castDurationTimer = new GameTimer(CAST_DURATION);
 
-        equippedItem = new Spellbook(0, 0);
+        equippedItem = new NoItem(0, 0);
 
         finishInitializing();
     }
