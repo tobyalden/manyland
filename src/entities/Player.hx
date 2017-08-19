@@ -23,6 +23,7 @@ class Player extends ActiveEntity
     {
         super(x, y);
         layer = 0;
+        name = "player";
 
         sprite = new Spritemap("graphics/player.png", 16, 25);
         sprite.add("down", [0, 1], 6);
@@ -137,6 +138,7 @@ class Player extends ActiveEntity
             new Spell(Math.round(centerX), Math.round(centerY), facing)
         );
         castDurationTimer.reset();
+        HUD.echo(Std.string(Math.random()));
     }
 
     private function animate()

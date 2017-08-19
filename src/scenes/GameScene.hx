@@ -20,6 +20,7 @@ class GameScene extends Scene
         for (entity in level.entities) {
             add(entity);
         }
+        add(new HUD());
     }
 
     public override function update()

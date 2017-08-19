@@ -21,17 +21,18 @@ class Level extends TmxEntity
         map = TmxMap.loadFromFile(filename);
         for(entity in map.getObjectGroup("entities").objects)
         {
-            trace('entity found: ' + entity.gid);
             if(entity.gid == PLAYER)
             {
-                trace('added player');
                 entities.push(new Player(entity.x, entity.y));
             }
         }
     }
 
-    override public function loadGraphic(tileset:String, layerNames:Array<String>, skip:Array<Int> = null)
+    override public function loadGraphic(
+        tileset:String, layerNames:Array<String>, skip:Array<Int> = null
+    )
     {
+        // We override this to set tilemap.smooth to false below
         var gid:Int, layer:TmxLayer;
         for (name in layerNames)
         {
@@ -42,7 +43,10 @@ class Level extends TmxEntity
             layer = map.layers.get(name);
             var spacing = map.getTileMapSpacing(name);
 
-            var tilemap = new Tilemap(tileset, map.fullWidth, map.fullHeight, map.tileWidth, map.tileHeight, spacing, spacing);
+            var tilemap = new Tilemap(
+                tileset, map.fullWidth, map.fullHeight, map.tileWidth,
+                map.tileHeight, spacing, spacing
+            );
             tilemap.smooth = false;
 
             // Loop through tile layer ids
@@ -59,7 +63,6 @@ class Level extends TmxEntity
                 }
             }
             addGraphic(tilemap);
-            trace('added graphic');
         }
     }
 
