@@ -9,7 +9,8 @@ class NoItem extends Item
     public function new(x:Int, y:Int) 
     {
         super(x, y);
-        graphic = Image.createRect(16, 16);
-        graphic.visible = false;
+        name = "noitem";
+        sprite = new Image("graphics/empty.png");
+        finishInitializing();
     }
 }

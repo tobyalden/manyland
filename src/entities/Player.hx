@@ -119,9 +119,11 @@ class Player extends ActiveEntity
 
     private function handleCollisions()
     {
-        var item = collide("item", x, y);
-        if(item != null) {
-            equippedItem = cast(item, Item);
+        var _item = collide("item", x, y);
+        if(_item != null) {
+            var item = cast(_item, Item);
+            equippedItem = item;
+            item.pickUp();
             scene.remove(item);
         }
     }
@@ -159,6 +161,11 @@ class Player extends ActiveEntity
     public function getFacing()
     {
         return facing;
+    }
+
+    public function getEquippedItem()
+    {
+        return equippedItem;
     }
 
     private function animate()

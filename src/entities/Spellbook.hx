@@ -8,6 +8,7 @@ class Spellbook extends Item
     public function new(x:Int, y:Int) 
     {
         super(x, y);
+        name = "spellbook";
         sprite = new Image("graphics/spellbook.png");
         finishInitializing();
     }
@@ -20,5 +21,11 @@ class Spellbook extends Item
             player.getFacing()
         ));
         HUD.echo(Std.string(Math.random()));
+    }
+
+    override public function pickUp()
+    {
+        HUD.echo("YOU FEEL POWER WASH OVER YOU");
+        HUD.echo("PRESS X TO CAST A SPELL");
     }
 }

@@ -12,6 +12,7 @@ class Item extends Entity
     {
         super(x, y);
         type = "item";
+        setHitbox(16, 16);
     }
 
     public function finishInitializing()
@@ -23,5 +24,15 @@ class Item extends Entity
     public function use(player:Player)
     {
         // Override in child classes
+    }
+
+    public function pickUp()
+    {
+        // Override in child classes
+    }
+
+    public function getSprite()
+    {
+        return sprite;
     }
 }
