@@ -9,6 +9,7 @@ class Level extends TmxEntity
 
     public static inline var PLAYER = 17;
     public static inline var SPELLBOOK = 18;
+    public static inline var SAVE_POINT = 19;
 
     public var entities:Array<Entity>;
 
@@ -30,6 +31,10 @@ class Level extends TmxEntity
             if(entity.gid == SPELLBOOK)
             {
                 entities.push(new Spellbook(entity.x, entity.y));
+            }
+            if(entity.gid == SAVE_POINT)
+            {
+                entities.push(new SavePoint(entity.x, entity.y));
             }
         }
     }

@@ -21,7 +21,10 @@ class Player extends ActiveEntity
 
     public function new(x:Int, y:Int)
     {
-        super(x, y);
+        Data.load('manyland');
+        var saveX:Int = Data.read('playerX', x);
+        var saveY:Int = Data.read('playerY', y);
+        super(saveX, saveY);
         layer = 0;
         name = "player";
 

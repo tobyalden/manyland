@@ -18,10 +18,12 @@ class ActiveEntity extends Entity
     }
 
     public function getScreenCoordinates() {
-      return new Point(
-        Math.floor(x / HXP.screen.width),
-        Math.floor(y / HXP.screen.height)
-      );
+        var realWidth = HXP.screen.width / HXP.screen.scale;
+        var realHeight = HXP.screen.height / HXP.screen.scale;
+        return new Point(
+            Math.floor(centerX / realWidth),
+            Math.floor(centerY / realHeight)
+        );
     }
 
     public function finishInitializing()
