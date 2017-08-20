@@ -49,7 +49,8 @@ class Player extends ActiveEntity
         rollTimer = new GameTimer(ROLL_DURATION);
         castDurationTimer = new GameTimer(CAST_DURATION);
 
-        inventory = [new NoItem()];
+        var saveInventory = Data.read("playerInventory", "noitem");
+        inventory = loadInventoryFromString(saveInventory);
         equippedItem = 0;
 
         finishInitializing();
@@ -223,6 +224,34 @@ class Player extends ActiveEntity
     public function getRollTimer()
     {
         return rollTimer;
+    }
+
+    public function getInventory()
+    {
+        return inventory;
+    }
+
+    public function getInventoryAsString()
+    {
+        var inventoryForSave = "";
+        for (item in inventory) {
+            if (inventoryForSave != "") {
+                inventoryForSave += ",";    
+            }
+            inventoryForSave += item.name;
+        }
+        return inventoryForSave;
+    }
+
+    public function loadInventoryFromString(inventoryAsString:String)
+    {
+        var itemNames = inventoryAsString.split(",");
+        var loadedInventory:Array<Item> = new Array<Item>();
+        for (itemName in itemNames) {
+            var item = Item.getFromName(itemName);
+            loadedInventory.push(item);
+        }
+        return loadedInventory;
     }
 
     private function animate()

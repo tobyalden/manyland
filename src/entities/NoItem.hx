@@ -6,9 +6,9 @@ import com.haxepunk.graphics.*;
 class NoItem extends Item
 {
     // A placeholder item to use when the player's inventory is empty
-    public function new() 
+    public function new(x:Int, y:Int) 
     {
-        super(0, 0);
+        super(x, y);
         name = "noitem";
         sprite = new Image("graphics/empty.png");
         finishInitializing();
