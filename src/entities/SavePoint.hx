@@ -46,7 +46,6 @@ class SavePoint extends ActiveEntity
     private function save(player:Player) {
         Data.write("playerX", x);
         Data.write("playerY", bottom);
-        //Data.write("hasSpellbook", player.hasSpellbook);
         HUD.echo("YOU HAVE BEEN REMEMBERED");
         Data.save("manyland");
         hasSaved = true;

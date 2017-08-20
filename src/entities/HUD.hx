@@ -27,6 +27,7 @@ class HUD extends Entity
         equipped.smooth = false;
         equipped.add("noitem", [0]);
         equipped.add("spellbook", [1]);
+        equipped.add("heal", [2]);
         equipped.play("noitem");
 
         equippedBar = Image.createRect(18, 18, 0x072103);
