@@ -17,7 +17,8 @@ class Player extends ActiveEntity
     private var rollTimer:GameTimer;
     private var castDurationTimer:GameTimer;
 
-    private var equippedItem:Item;
+    private var inventory:Array<Item>;
+    private var equippedItem:Int;
 
     public function new(x:Int, y:Int)
     {
@@ -48,7 +49,8 @@ class Player extends ActiveEntity
         rollTimer = new GameTimer(ROLL_DURATION);
         castDurationTimer = new GameTimer(CAST_DURATION);
 
-        equippedItem = new NoItem(0, 0);
+        inventory = [new NoItem()];
+        equippedItem = 0;
 
         finishInitializing();
     }
@@ -60,12 +62,34 @@ class Player extends ActiveEntity
         );
         if(inControl) {
             movement();
+            if(Input.pressed(Key.A)) {
+                prevItem();
+            }
+            if(Input.pressed(Key.S)) {
+                nextItem();
+            }
         }
         moveBy(velocity.x, velocity.y, "walls");
         handleCollisions();
         setCamera();
         animate();
         super.update();
+    }
+
+    private function prevItem()
+    {
+        equippedItem -= 1;
+        if(equippedItem < 0) {
+            equippedItem = inventory.length - 1;
+        }
+    }
+
+    private function nextItem()
+    {
+        equippedItem += 1;
+        if(equippedItem >= inventory.length) {
+            equippedItem = 0;
+        }
     }
 
     private function movement()
@@ -140,8 +164,12 @@ class Player extends ActiveEntity
     {
         var _item = collide("item", x, y);
         if(_item != null) {
+            if(inventory[0].name == "noitem") {
+                inventory.pop();
+            }
             var item = cast(_item, Item);
-            equippedItem = item;
+            inventory.push(item);
+            equippedItem = inventory.length - 1;
             item.pickUp();
             scene.remove(item);
         }
@@ -167,7 +195,7 @@ class Player extends ActiveEntity
 
     private function useItem()
     {
-        equippedItem.use(this);
+        inventory[equippedItem].use(this);
     }
 
     public function stopToCast()
@@ -189,7 +217,7 @@ class Player extends ActiveEntity
 
     public function getEquippedItem()
     {
-        return equippedItem;
+        return inventory[equippedItem];
     }
 
     public function getRollTimer()
