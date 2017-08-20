@@ -11,12 +11,10 @@ class Player extends ActiveEntity
     public static inline var SPEED = 1;
     public static inline var ROLL_MULTIPLIER = 2;
     public static inline var ROLL_DURATION = 20;
-    public static inline var ROLL_COOLDOWN = 12;
-    public static inline var CAST_DURATION= 20;
+    public static inline var CAST_DURATION = 20;
 
     private var facing:String;
     private var rollTimer:GameTimer;
-    private var rollCooldownTimer:GameTimer;
     private var castDurationTimer:GameTimer;
 
     private var equippedItem:Item;
@@ -45,7 +43,6 @@ class Player extends ActiveEntity
 
         facing = "down";
         rollTimer = new GameTimer(ROLL_DURATION);
-        rollCooldownTimer = new GameTimer(ROLL_COOLDOWN);
         castDurationTimer = new GameTimer(CAST_DURATION);
 
         equippedItem = new NoItem(0, 0);
@@ -72,9 +69,6 @@ class Player extends ActiveEntity
     {
         if(!rollTimer.isActive())
         {
-            if(rollTimer.wasActive()) {
-                rollCooldownTimer.reset();
-            }
             if(Input.check(Key.LEFT)) {
                 velocity.x = -SPEED;
                 facing = "left";
@@ -98,23 +92,45 @@ class Player extends ActiveEntity
                 velocity.y = 0;
             }
 
-            if(Input.check(Key.Z)) {
-                if(!rollCooldownTimer.isActive()) {
-                    rollTimer.reset();
-                    var singleDirectionMultipler:Float = 1;
-                    if(velocity.x == 0 || velocity.y == 0) {
-                        singleDirectionMultipler = 1.37;
-                    }
-                    velocity.x *= ROLL_MULTIPLIER * singleDirectionMultipler;
-                    velocity.y *= ROLL_MULTIPLIER * singleDirectionMultipler;
-                }
+            if(Input.pressed(Key.Z)) {
+                roll();
             }
         }
 
-        if(Input.check(Key.X)) {
+        if(Input.pressed(Key.X)) {
             useItem();
         }
 
+    }
+
+    private function roll()
+    {
+        rollTimer.reset();
+        var singleDirectionMultipler:Float = 1;
+        if(velocity.x == 0 && velocity.y == 0) {
+            setVelocityToFacing();
+        }
+        if(velocity.x == 0 || velocity.y == 0) {
+            singleDirectionMultipler = 1.37;
+        }
+        velocity.x *= ROLL_MULTIPLIER * singleDirectionMultipler;
+        velocity.y *= ROLL_MULTIPLIER * singleDirectionMultipler;
+    }
+
+    private function setVelocityToFacing()
+    {
+        if(facing == "left") {
+            velocity.x = -SPEED;
+        }
+        else if(facing == "right") {
+            velocity.x = SPEED;
+        }
+        else if(facing == "down") {
+            velocity.y = SPEED;
+        }
+        else if(facing == "up") {
+            velocity.y = -SPEED;
+        }
     }
 
     private function handleCollisions()
@@ -158,6 +174,11 @@ class Player extends ActiveEntity
         castDurationTimer.reset();
     }
 
+    public function isShadowVisible()
+    {
+        return rollTimer.isActive();
+    }
+
     public function getFacing()
     {
         return facing;
@@ -166,6 +187,11 @@ class Player extends ActiveEntity
     public function getEquippedItem()
     {
         return equippedItem;
+    }
+
+    public function getRollTimer()
+    {
+        return rollTimer;
     }
 
     private function animate()

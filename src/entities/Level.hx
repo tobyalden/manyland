@@ -25,6 +25,7 @@ class Level extends TmxEntity
             if(entity.gid == PLAYER)
             {
                 entities.push(new Player(entity.x, entity.y));
+                entities.push(new Shadow(entity.x, entity.y));
             }
             if(entity.gid == SPELLBOOK)
             {
